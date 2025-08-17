@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 180 100% 99%;
+    --foreground: 222 47% 11%;
+    
+    --mint: 160 84% 39%;
+    --coral: 16 100% 66%;
+    --purple: 262 83% 58%;
+    --sky: 199 95% 74%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    --primary: var(--mint);
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: var(--coral);
+    --secondary-foreground: 222 47% 11%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    --accent: var(--purple);
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: var(--sky);
+    
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image: 
+      radial-gradient(at 100% 0%, hsla(var(--purple) / 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(var(--mint) / 0.1) 0px, transparent 50%);
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-[hsl(var(--coral))] to-[hsl(var(--purple))] bg-clip-text text-transparent;
+    font-size: clamp(2rem, 8vw, 3.75rem);
+    line-height: 1.1;
+  }
+  
+  .card-shadow {
+    @apply shadow-[0_0_15px_rgba(0,0,0,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.15)] transition-shadow duration-300;
+  }
+
+  .button-gradient {
+    @apply bg-gradient-to-r from-[hsl(var(--mint))] to-[hsl(var(--sky))] hover:opacity-90 transition-opacity;
+  }
+
+  .partners-scroll {
+    @apply flex whitespace-nowrap;
+    animation: scroll 15s linear infinite;
+    min-width: 100%;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  
+  .partners-scroll-reverse {
+    @apply flex whitespace-nowrap;
+    animation: scroll-reverse 15s linear infinite;
+    min-width: 100%;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 2rem));
+  }
+}
+
+@keyframes scroll-reverse {
+  from {
+    transform: translateX(calc(-100% - 2rem));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.youtube-container {
+  @apply relative w-full max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl transition-transform duration-300;
+  aspect-ratio: 16/9;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.youtube-container iframe {
+  @apply absolute inset-0 w-full h-full rounded-2xl;
+}
+
+@media (max-width: 640px) {
+  .partners-scroll,
+  .partners-scroll-reverse {
+    animation-duration: 12s;
+  }
+  
+  .youtube-container {
+    @apply mx-0;
+    border-radius: 1rem;
+    max-height: 60vh;
+  }
+
+  .card-shadow {
+    @apply shadow-[0_0_10px_rgba(0,0,0,0.08)];
+  }
+
+  body {
+    @apply text-sm;
+  }
+
+  h1, h2, h3 {
+    @apply tracking-tight;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    @apply px-4;
+  }
+
+  .button-gradient {
+    @apply w-full justify-center;
+  }
+}

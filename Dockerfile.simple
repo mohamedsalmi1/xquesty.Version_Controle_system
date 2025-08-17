@@ -1,0 +1,39 @@
+FROM nginx:alpine
+
+# Install debugging tools
+RUN apk add --no-cache curl bash
+
+# Copy pre-built files to nginx html directory
+COPY dist /usr/share/nginx/html
+
+# Create env-config.js file
+RUN echo 'window.ENV = {' > /usr/share/nginx/html/env-config.js && \
+    echo '  "VITE_API_URL": "http://localhost:3000",' >> /usr/share/nginx/html/env-config.js && \
+    echo '  "IS_DOCKER": true,' >> /usr/share/nginx/html/env-config.js && \
+    echo '  "VITE_STUDENT_SUPABASE_URL": "",' >> /usr/share/nginx/html/env-config.js && \
+    echo '  "VITE_STUDENT_SUPABASE_ANON_KEY": "",' >> /usr/share/nginx/html/env-config.js && \
+    echo '  "REACT_APP_AZURE_CLIENT_ID": "",' >> /usr/share/nginx/html/env-config.js && \
+    echo '  "REACT_APP_AZURE_TENANT_ID": ""' >> /usr/share/nginx/html/env-config.js && \
+    echo '};' >> /usr/share/nginx/html/env-config.js
+
+# Configure nginx
+RUN echo 'server {' > /etc/nginx/conf.d/default.conf && \
+    echo '    listen 80;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    server_name localhost;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    root /usr/share/nginx/html;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    index index.html;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    location / {' >> /etc/nginx/conf.d/default.conf && \
+    echo '        try_files $uri $uri/ /index.html;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    }' >> /etc/nginx/conf.d/default.conf && \
+    echo '    location /health {' >> /etc/nginx/conf.d/default.conf && \
+    echo '        access_log off;' >> /etc/nginx/conf.d/default.conf && \
+    echo '        add_header Content-Type text/plain;' >> /etc/nginx/conf.d/default.conf && \
+    echo '        return 200 "healthy";' >> /etc/nginx/conf.d/default.conf && \
+    echo '    }' >> /etc/nginx/conf.d/default.conf && \
+    echo '}' >> /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Default command
+CMD ["nginx", "-g", "daemon off;"]

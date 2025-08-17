@@ -1,0 +1,34 @@
+# Node modules and dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Git and version control
+.git
+.gitignore
+.github
+
+# Editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Docker files (not needed inside container)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Environment files that shouldn't be in the container
+.env
+.env.*
+# Except .env.docker
+!.env.docker
+
+# Build artifacts we need
+!dist
+!dist/*

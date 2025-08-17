@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Debugger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        .status {
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>StageQuest Registration Debugger</h1>
+    
+    <h2>1. Request Data</h2>
+    <textarea id="requestData">{
+  "name": "Test User",
+  "company": "Test Company",
+  "email": "test@example.com",
+  "password": "TestPassword123!"
+}</textarea>
+    
+    <h2>2. Request Method</h2>
+    <div>
+        <button id="btnFetch">Try with Fetch API</button>
+        <button id="btnXhr">Try with XMLHttpRequest</button>
+        <button id="btnForm">Try with Form Submit</button>
+    </div>
+    
+    <div class="status" id="status">Ready to test</div>
+    
+    <h2>3. Response</h2>
+    <pre id="response">Results will appear here...</pre>
+    
+    <script>
+        // Helper function to update status
+        function updateStatus(message, isError = false) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + (isError ? 'error' : '');
+        }
+        
+        // Helper function to update response
+        function updateResponse(data) {
+            const responseEl = document.getElementById('response');
+            if (typeof data === 'object') {
+                responseEl.textContent = JSON.stringify(data, null, 2);
+            } else {
+                responseEl.textContent = data;
+            }
+        }
+        
+        // Get request data from textarea
+        function getRequestData() {
+            const dataString = document.getElementById('requestData').value;
+            try {
+                return JSON.parse(dataString);
+            } catch (e) {
+                updateStatus('Invalid JSON in request data!', true);
+                updateResponse(`Error parsing JSON: ${e.message}`);
+                return null;
+            }
+        }
+        
+        // Test with Fetch API
+        document.getElementById('btnFetch').addEventListener('click', async function() {
+            const data = getRequestData();
+            if (!data) return;
+            
+            updateStatus('Sending request with Fetch API...');
+            updateResponse('Waiting for response...');
+            
+            try {
+                console.log('Sending payload:', data);
+                
+                const response = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log('Response status:', response.status);
+                
+                const headerInfo = {};
+                response.headers.forEach((value, name) => {
+                    headerInfo[name] = value;
+                });
+                
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+                
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (e) {
+                    responseData = { raw: responseText };
+                }
+                
+                const result = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: headerInfo,
+                    data: responseData
+                };
+                
+                updateStatus(response.ok ? 'Request successful!' : `Error: ${response.status}`, !response.ok);
+                updateResponse(result);
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                updateStatus(`Network error: ${error.message}`, true);
+                updateResponse({ error: error.message });
+            }
+        });
+        
+        // Test with XMLHttpRequest
+        document.getElementById('btnXhr').addEventListener('click', function() {
+            const data = getRequestData();
+            if (!data) return;
+            
+            updateStatus('Sending request with XMLHttpRequest...');
+            updateResponse('Waiting for response...');
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:3000/api/register', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            
+            xhr.onload = function() {
+                console.log('XHR response received:', xhr.status);
+                
+                let responseData;
+                try {
+                    responseData = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    responseData = { raw: xhr.responseText };
+                }
+                
+                const headerLines = xhr.getAllResponseHeaders().split('\r\n');
+                const headers = {};
+                headerLines.forEach(line => {
+                    const parts = line.split(': ');
+                    if (parts[0]) {
+                        headers[parts[0]] = parts[1];
+                    }
+                });
+                
+                const result = {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    headers: headers,
+                    data: responseData
+                };
+                
+                updateStatus(xhr.status >= 200 && xhr.status < 300 ? 'Request successful!' : `Error: ${xhr.status}`, !(xhr.status >= 200 && xhr.status < 300));
+                updateResponse(result);
+            };
+            
+            xhr.onerror = function() {
+                console.error('XHR network error');
+                updateStatus('Network error!', true);
+                updateResponse({ error: 'Network error occurred' });
+            };
+            
+            xhr.timeout = 10000; // 10 seconds timeout
+            xhr.ontimeout = function() {
+                updateStatus('Request timed out!', true);
+                updateResponse({ error: 'Request timed out after 10 seconds' });
+            };
+            
+            console.log('Sending XHR payload:', data);
+            xhr.send(JSON.stringify(data));
+        });
+        
+        // Test with Form Submit
+        document.getElementById('btnForm').addEventListener('click', function() {
+            const data = getRequestData();
+            if (!data) return;
+            
+            updateStatus('Creating form submission...');
+            
+            // Create a form dynamically
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://localhost:3000/api/register';
+            form.target = '_blank'; // Open in new tab
+            form.style.display = 'none';
+            
+            // Add form fields
+            Object.entries(data).forEach(([key, value]) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            });
+            
+            // Add to document and submit
+            document.body.appendChild(form);
+            updateStatus('Form created, submitting...');
+            form.submit();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(form);
+                updateStatus('Form submitted in new tab');
+                updateResponse('Check the newly opened tab for results');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

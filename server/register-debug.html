@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Debug Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        button {
+            padding: 10px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status {
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        .panel {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Registration Debug Tool</h1>
+    <p>Use this page to diagnose registration issues with detailed logging</p>
+
+    <div class="panel">
+        <h2>1. Request Payload</h2>
+        <textarea id="requestData">{
+  "name": "Debug User",
+  "company": "Debug Company",
+  "email": "debug@example.com",
+  "password": "Debug123!"
+}</textarea>
+    </div>
+    
+    <div class="panel">
+        <h2>2. Send Request</h2>
+        <button id="sendFetch">Send via Fetch API</button>
+        <button id="sendXhr">Send via XMLHttpRequest</button>
+        <button id="sendForm">Send via Form Post</button>
+        <div class="status" id="status">Ready to send</div>
+    </div>
+
+    <div class="panel">
+        <h2>3. Request Details</h2>
+        <pre id="requestDetails">No request sent yet</pre>
+    </div>
+
+    <div class="panel">
+        <h2>4. Response</h2>
+        <pre id="responseDetails">No response yet</pre>
+    </div>
+
+    <script>
+        // Get elements
+        const requestDataEl = document.getElementById('requestData');
+        const statusEl = document.getElementById('status');
+        const requestDetailsEl = document.getElementById('requestDetails');
+        const responseDetailsEl = document.getElementById('responseDetails');
+        
+        // Helper to parse JSON safely
+        function parseJson(str) {
+            try {
+                return JSON.parse(str);
+            } catch (e) {
+                return { error: `Invalid JSON: ${e.message}`, raw: str };
+            }
+        }
+        
+        // Helper to update status
+        function updateStatus(message, isError = false) {
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + (isError ? 'error' : '');
+        }
+        
+        // Get request data
+        function getRequestData() {
+            try {
+                const data = parseJson(requestDataEl.value);
+                if (typeof data !== 'object' || data === null) {
+                    throw new Error('Request data must be a valid JSON object');
+                }
+                return data;
+            } catch (e) {
+                updateStatus(`Invalid JSON: ${e.message}`, true);
+                return null;
+            }
+        }
+
+        // Test with Fetch API
+        document.getElementById('sendFetch').addEventListener('click', async () => {
+            const data = getRequestData();
+            if (!data) return;
+            
+            updateStatus('Sending request via Fetch API...');
+            
+            // Log the request details
+            const requestInfo = {
+                url: 'http://localhost:3000/api/register',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: data
+            };
+            
+            requestDetailsEl.textContent = JSON.stringify(requestInfo, null, 2);
+            
+            try {
+                const startTime = performance.now();
+                
+                const response = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const endTime = performance.now();
+                const responseText = await response.text();
+                
+                // Create headers object
+                const headers = {};
+                response.headers.forEach((value, key) => {
+                    headers[key] = value;
+                });
+                
+                // Parse response if it's JSON
+                let parsedResponse;
+                try {
+                    parsedResponse = JSON.parse(responseText);
+                } catch (e) {
+                    parsedResponse = { raw: responseText };
+                }
+                
+                // Build response details
+                const responseInfo = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: headers,
+                    timing: `${(endTime - startTime).toFixed(2)}ms`,
+                    body: parsedResponse
+                };
+                
+                responseDetailsEl.textContent = JSON.stringify(responseInfo, null, 2);
+                
+                if (response.ok) {
+                    updateStatus(`Success! (${response.status})`, false);
+                } else {
+                    updateStatus(`Error: ${response.status} ${response.statusText}`, true);
+                }
+            } catch (error) {
+                updateStatus(`Network error: ${error.message}`, true);
+                responseDetailsEl.textContent = JSON.stringify({
+                    error: error.message,
+                    stack: error.stack
+                }, null, 2);
+            }
+        });
+
+        // Test with XMLHttpRequest
+        document.getElementById('sendXhr').addEventListener('click', () => {
+            const data = getRequestData();
+            if (!data) return;
+            
+            updateStatus('Sending request via XMLHttpRequest...');
+            
+            // Log the request details
+            const requestInfo = {
+                url: 'http://localhost:3000/api/register',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: data
+            };
+            
+            requestDetailsEl.textContent = JSON.stringify(requestInfo, null, 2);
+            
+            const xhr = new XMLHttpRequest();
+            const startTime = performance.now();
+            
+            xhr.open('POST', 'http://localhost:3000/api/register', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('Accept', 'application/json');
+            
+            xhr.onload = function() {
+                const endTime = performance.now();
+                
+                // Parse response if it's JSON
+                let parsedResponse;
+                try {
+                    parsedResponse = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    parsedResponse = { raw: xhr.responseText };
+                }
+                
+                // Parse headers
+                const headerLines = xhr.getAllResponseHeaders().split('\r\n');
+                const headers = {};
+                headerLines.forEach(line => {
+                    const parts = line.split(': ');
+                    if (parts[0]) {
+                        headers[parts[0]] = parts[1];
+                    }
+                });
+                
+                // Build response details
+                const responseInfo = {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    headers: headers,
+                    timing: `${(endTime - startTime).toFixed(2)}ms`,
+                    body: parsedResponse
+                };
+                
+                responseDetailsEl.textContent = JSON.stringify(responseInfo, null, 2);
+                
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    updateStatus(`Success! (${xhr.status})`, false);
+                } else {
+                    updateStatus(`Error: ${xhr.status} ${xhr.statusText}`, true);
+                }
+            };
+            
+            xhr.onerror = function() {
+                updateStatus('Network error', true);
+                responseDetailsEl.textContent = 'Failed to connect to server';
+            };
+            
+            xhr.send(JSON.stringify(data));
+        });
+
+        // Test with form submission
+        document.getElementById('sendForm').addEventListener('click', () => {
+            const data = getRequestData();
+            if (!data) return;
+            
+            updateStatus('Creating form for submission...');
+            
+            // Create a form element
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://localhost:3000/api/register';
+            form.target = '_blank'; // Open in new tab
+            form.style.display = 'none';
+            
+            // Add form fields for each property in the data
+            Object.entries(data).forEach(([key, value]) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            });
+            
+            // Log the form data
+            const formData = {};
+            Object.entries(data).forEach(([key, value]) => {
+                formData[key] = value;
+            });
+            
+            requestDetailsEl.textContent = JSON.stringify({
+                method: 'POST',
+                url: 'http://localhost:3000/api/register',
+                formData: formData
+            }, null, 2);
+            
+            // Add to document and submit
+            document.body.appendChild(form);
+            updateStatus('Form created, submitting...');
+            form.submit();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(form);
+                updateStatus('Form submitted in new tab');
+                responseDetailsEl.textContent = 'Check the newly opened tab for results';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
