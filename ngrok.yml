@@ -1,0 +1,8 @@
+version: "2"
+# authtoken: ${NGROK_AUTHTOKEN}
+
+tunnels:
+  question:
+    proto: http
+    addr: question:3001
+    domain: honest-lenient-shepherd.ngrok-free.app

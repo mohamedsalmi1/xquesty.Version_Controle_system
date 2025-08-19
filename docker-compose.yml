@@ -1,55 +1,47 @@
 services:
-  # Frontend service using custom Dockerfile
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: stagequest-frontend
+      dockerfile: Dockerfile.frontend
     ports:
-      - "80:80"
+      - "5137:80"
     depends_on:
-      - api
-    networks:
-      - stagequest-network
-    environment:
-      - VITE_API_URL=http://localhost:3000
-      # For browser access, we use localhost not the Docker service name
-      - VITE_STUDENT_SUPABASE_URL=${VITE_STUDENT_SUPABASE_URL}
-      - VITE_STUDENT_SUPABASE_ANON_KEY=${VITE_STUDENT_SUPABASE_ANON_KEY}
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
+      - backend
+      - question
 
-  # Backend API service using custom Dockerfile
-  api:
+  backend:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: stagequest-api
     ports:
       - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
-      - HOST=0.0.0.0
-      - VITE_STUDENT_SUPABASE_URL=${VITE_STUDENT_SUPABASE_URL}
-      - VITE_STUDENT_SUPABASE_ANON_KEY=${VITE_STUDENT_SUPABASE_ANON_KEY}
-    networks:
-      - stagequest-network
+    env_file:
+      - .env
+
+  question:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.question
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+
+
+
+
+  ngrok:
+    image: ngrok/ngrok:latest
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    command: start --all --config /etc/ngrok.yml
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    env_file:
+      - .env
+    ports:
+      - "4040:4040"
 
-networks:
-  stagequest-network:
-    driver: bridge
 
-volumes:
-  api-data:
+      
