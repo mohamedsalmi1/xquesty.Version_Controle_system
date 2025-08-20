@@ -1,1 +1,2 @@
-this file is only tetting the merge functionality in git
+this file is only tetting the functionality in git
+here i deleted something and waiting to see it also in main branch
