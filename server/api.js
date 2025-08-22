@@ -11,7 +11,7 @@ const authHelper = require('./authHelper');
 
 // CORS configuration
 app.use(cors({ 
-  origin: ["http://localhost:5173", "http://localhost", "http://frontend"],
+  origin: ["https://mainquesty-frontend.azurewebsites.net"],
   methods: ["GET", "POST", "OPTIONS", "HEAD"], 
   allowedHeaders: ["Content-Type", "Authorization"] 
 }));

@@ -78,10 +78,10 @@ const InterviewSystem = () => {
   const answerTextareaRef = useRef(null);
 
   // Configuration
-  // Use your ngrok backend server URL here
+  // Use your azure question backend server URL here
   const CONFIG = {
-    startWebhook: 'https://honest-lenient-shepherd.ngrok-free.app/start-interview',
-    answerWebhook: 'https://honest-lenient-shepherd.ngrok-free.app/receive-answer',
+    startWebhook: 'https://mainquesty-question.azurewebsites.net/start-interview',
+    answerWebhook: 'https://mainquesty-question.azurewebsites.net/receive-answer',
     maxQuestions: 20
   };
 
@@ -105,10 +105,8 @@ const InterviewSystem = () => {
         }
         console.log(' Polling attempt started...');
         try {
-          // Try multiple header combinations
+          // Try multiple header combinations (ngrok headers removed, not needed for Azure)
           const headerOptions = [
-            { 'ngrok-skip-browser-warning': 'any' },
-            { 'ngrok-skip-browser-warning': 'true' },
             { 'User-Agent': 'curl/7.68.0' },
             { 'User-Agent': 'PostmanRuntime/7.28.0' },
             {}
@@ -118,7 +116,7 @@ const InterviewSystem = () => {
           for (let i = 0; i < headerOptions.length; i++) {
             try {
               console.log(`📡 Trying header option ${i + 1}:`, headerOptions[i]);
-              res = await fetch(`https://honest-lenient-shepherd.ngrok-free.app/api/latest-question?student_id=${encodeURIComponent(currentStudentId)}`, {
+              res = await fetch(`https://mainquesty-question.azurewebsites.net/api/latest-question?student_id=${encodeURIComponent(currentStudentId)}`, {
                 method: 'GET',
                 headers: headerOptions[i]
               });
@@ -285,8 +283,8 @@ const InterviewSystem = () => {
         setTimeout(async () => {
           try {
             console.log('🔍 Trying to fetch first question immediately...');
-            // Use ngrok backend for latest-question as well
-            const res = await fetch(`https://honest-lenient-shepherd.ngrok-free.app/api/latest-question?student_id=${encodeURIComponent(currentStudentId)}`);
+            // Use Azure backend for latest-question
+            const res = await fetch(`https://mainquesty-question.azurewebsites.net/api/latest-question?student_id=${encodeURIComponent(currentStudentId)}`);
             console.log('🔍 Immediate fetch status:', res.status);
             const rawText = await res.text();
             console.log('🔍 Immediate fetch raw response:', rawText);
@@ -331,7 +329,7 @@ const InterviewSystem = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
+          // No ngrok headers needed for Azure
         },
         body: JSON.stringify({
           question: currentQuestion,
@@ -359,7 +357,7 @@ const InterviewSystem = () => {
 
         // Force re-fetch latest question and update UI
         try {
-          const latestRes = await fetch(`https://honest-lenient-shepherd.ngrok-free.app/api/latest-question?student_id=${encodeURIComponent(currentStudentId)}&ts=${Date.now()}`, { cache: 'no-store' });
+          const latestRes = await fetch(`https://mainquesty-question.azurewebsites.net/api/latest-question?student_id=${encodeURIComponent(currentStudentId)}&ts=${Date.now()}`, { cache: 'no-store' });
           if (latestRes.ok) {
             const newData = await latestRes.json();
             if (newData && newData.question) {

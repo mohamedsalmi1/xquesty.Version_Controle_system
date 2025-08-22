@@ -15,8 +15,8 @@ console.log('VITE_RECRUITER_SUPABASE_ANON_KEY:', process.env.VITE_RECRUITER_SUPA
 
 // Supabase configuration for recruiters
 const config = {
-  url: process.env.VITE_RECRUITER_SUPABASE_URL || 'https://pkcrptyqaxiscagpbchr.supabase.co',
-  anonKey: process.env.VITE_RECRUITER_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrY3JwdHlxYXhpc2NhZ3BiY2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIxNjM1MTQsImV4cCI6MjA2NzczOTUxNH0.jZMVaWZNWYw0chvu8--oFYQgTVh5y31YYzq7X61pojs'
+  url: process.env.VITE_RECRUITER_SUPABASE_URL,
+  anonKey: process.env.VITE_RECRUITER_SUPABASE_ANON_KEY
 };
 
 console.log('Supabase config loaded:');
