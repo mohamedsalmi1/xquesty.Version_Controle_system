@@ -75,49 +75,49 @@ export default function App() {
       id: 'smart-matching',
       title: 'Automated Workflows',
       icon: Brain,
-      description: 'Ditch the manual work—xQuesty\'s automated workflows keep hiring moving while you focus on what matters. Spend less time on repetitive tasks and more time finding the right talent.'
+      description: 'With xQuesty, companies save time on hiring and job seekers get faster opportunities. No more wasted effort just the right match, quicker.'
     },
     {
       id: 'direct-placement',
       title: 'Direct Placement',
       icon: Target,
-      description: 'We don\'t just show you listings—we place you directly inside companies. Our exclusive partnerships ensure real Job / Internship opportunities with guaranteed mentorship and meaningful projects.'
+      description: 'We don\'t just show you listings we place you directly inside companies. Our exclusive partnerships ensure real Job / Internship opportunities with guaranteed mentorship and meaningful projects.'
     },
-    {
-      id: 'success-stories',
-      title: 'Success Stories',
-      icon: TrendingUp,
-      description: 'Our approach is validated by real results: 95% of our interns receive full-time offers, 87% report significant skill development, and 92% say their xQuesty internship was pivotal to their career growth.'
-    },
+    // {
+    //   id: 'success-stories',
+    //   title: 'Success Stories',
+    //   icon: TrendingUp,
+    //   description: 'Our approach is validated by real results: 95% of our interns receive full-time offers, 87% report significant skill development, and 92% say their xQuesty internship was pivotal to their career growth.'
+    // },
     {
       id: 'end-to-end',
       title: 'End-to-End Support',
       icon: Users,
-      description: 'From resume optimization and interview preparation to ongoing mentorship during your internship, we provide comprehensive support at every step of your journey.'
+      description: 'We provide fast, reliable support at every stage helping companies hire efficiently while guiding job seekers and interns with the tools and advice they need to succeed.'
     },
     {
       id: 'industry-network',
-      title: 'Industry Network',
+      title: 'Your Gateway to Exclusive Roles',
       icon: Network,
       description: 'Gain access to Jobs that aren\'t publicly advertised. Our network of industry partners trusts us to send them top talent, giving you access to premium opportunities.'
     },
     {
       id: 'Backed by science',
-      title: 'Skill Development',
+      title: 'Hire with Confidence',
       icon: BookOpen,
       description: 'Goodbye gut feeling, hello data-driven decisions. xQuesty’s science-backed evaluations help you more accurately predict job performance, so you can hire with confidence and build stronger teams.'
     },
-    {
-      id: 'career-coaching',
-      title: 'Career Coaching',
-      icon: MessageCircle,
-      description: 'Every xQuesty student gets paired with a personal career coach who provides ongoing guidance, helps navigate workplace challenges, and plans long-term career trajectory.'
-    },
+    // {
+    //   id: 'career-coaching',
+    //   title: 'Career Coaching',
+    //   icon: MessageCircle,
+    //   description: 'Every xQuesty student gets paired with a personal career coach who provides ongoing guidance, helps navigate workplace challenges, and plans long-term career trajectory.'
+    // },
     {
       id: 'alumni-network',
-      title: 'Alumni Network',
+      title: 'Save Time and Money',
       icon: UserCheck,
-      description: 'Become part of an exclusive alumni network of professionals who launched their careers through xQuesty. Access mentorship, job referrals, and networking opportunities.'
+      description: 'xQuesty helps companies hire smarter by reducing the time and money spent on recruitment. Our data-driven evaluations quickly identify the best candidates, so you can make confident decisions, minimize hiring mistakes, and focus your resources where they matter most.'
     }
   ];
 
@@ -280,8 +280,11 @@ export default function App() {
                   >
                     {isPlaying ? (
                       <iframe
-                        src="https://www.youtube.com/watch?v=6nGM37ThEsU"
+                        width="100%"
+                        height="100%"
+                        src="https://www.youtube.com/embed/6nGM37ThEsU"
                         title="xQuesty Introduction"
+                        frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         className="w-full h-full rounded-2xl"
@@ -528,9 +531,9 @@ export default function App() {
                 <section className="container mx-auto px-4 py-8 sm:py-16 text-center">
                   <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">About xQuesty</h2>
                   <p className="max-w-2xl mx-auto text-base sm:text-lg mb-6 sm:mb-8 px-2">
-                    We're on a mission to connect passionate students with meaningful internship opportunities.
-                    Our team of dedicated mentors and industry experts work tirelessly to match you with
-                    companies that share your values and vision.
+                    xQuesty makes finding the right job fast and simple for candidates, 
+                    while helping HR teams make the right hiring decisions, 
+                    reduce recruitment costs, and save time.
                   </p>
                 </section>
                 {/* FAQ */}
@@ -539,20 +542,56 @@ export default function App() {
                   <div className="grid sm:grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto">
                     <Card>
                       <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">What if I don't know what field to choose?</h3>
-                        <p>That's completely normal! Our mentors will help you explore different fields based on your interests and strengths.</p>
+                        <h3 className="font-semibold text-lg mb-2">How can I get a job?</h3>
+                        <p>Create an account, start your interview, and XQuesty will match you with the perfect job opportunities.</p>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">Do I need experience to get an internship?</h3>
-                        <p>Not at all! Many companies value enthusiasm and potential over experience. We'll help you showcase your strengths.</p>
+                        <h3 className="font-semibold text-lg mb-2">How do companies benefit from XQuesty?</h3>
+                        <p>Companies save time and money, hire the right people, and get access to top candidates efficiently.</p>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">Will xQuesty help me prepare for interviews?</h3>
-                        <p>Absolutely! We provide interview preparation, resume reviews, and personalized coaching to help you succeed.</p>
+                        <h3 className="font-semibold text-lg mb-2">How does XQuesty work?</h3>
+                        <p>XQuesty uses advanced algorithms to match candidates with job opportunities based on their skills, preferences, and career goals.</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="font-semibold text-lg mb-2">Why do I need to pass an interview first?</h3>
+                        <p>The interview helps us understand your skills, strengths, and preferences so we can find the best job matchfor you.</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="font-semibold text-lg mb-2">Can XQuesty help with internships too?</h3>
+                        <p>Yes! We connect students and interns with opportunities that match their skills and goals.</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="font-semibold text-lg mb-2">Can XQuesty reduce our recruitment costs?</h3>
+                        <p>Yes! By providing qualified candidates directly, you spend less on advertising, agencies, and lengthy recruitment processes.</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="font-semibold text-lg mb-2">How fast will we receive candidate matches?</h3>
+                        <p>Once a candidate passes their interview, they are immediately matched with your job openings.</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="font-semibold text-lg mb-2">Can we customize candidate criteria?</h3>
+                        <p>Yes, you can set specific requirements like skills, experience, location, and more to find the best candidates for your needs.</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="font-semibold text-lg mb-2">How do we get started with XQuesty for our company?</h3>
+                        <p>To get started, simply contact our sales team or sign up on our website. We'll guide you through the onboarding process and help you set up your account.</p>
                       </CardContent>
                     </Card>
                   </div>

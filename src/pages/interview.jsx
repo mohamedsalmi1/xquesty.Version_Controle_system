@@ -549,14 +549,34 @@ const InterviewSystem = () => {
             <div className="flex flex-col gap-2 mb-2">
               <div className="text-sm text-gray-600">Student: <span className="font-semibold">{currentStudentName}</span></div>
               <div className="text-sm text-gray-600">Phone: <span className="font-semibold">{phone}</span></div>
-              <div className="text-sm text-gray-600">Question {questionCount} of {CONFIG.maxQuestions}</div>
               <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                 <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
               </div>
             </div>
             <h3 className="text-lg font-bold mb-2">Current Question</h3>
-            <div className="bg-gray-50 border rounded-md p-4 min-h-[60px] mb-2 text-gray-800">
-              {currentQuestion || <span className="text-gray-400">Waiting for question...</span>}
+            <div className="bg-gray-50 border rounded-md p-4 min-h-[60px] mb-2 text-gray-800 relative">
+              {isWaitingForQuestion ? (
+                <div className="flex flex-col items-center justify-center py-4">
+                  <div className="spinner-modern mb-2"></div>
+                  <span className="text-blue-600 font-medium">Reviewing what you just said...</span>
+                </div>
+              ) : (
+                currentQuestion || <span className="text-gray-400">Waiting for question...</span>
+              )}
+              <style>{`
+                .spinner-modern {
+                  width: 32px;
+                  height: 32px;
+                  border: 4px solid #e1e5e9;
+                  border-top: 4px solid #667eea;
+                  border-radius: 50%;
+                  animation: spin-modern 1s linear infinite;
+                }
+                @keyframes spin-modern {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+                }
+              `}</style>
             </div>
             <textarea
               ref={answerTextareaRef}
@@ -565,12 +585,12 @@ const InterviewSystem = () => {
               value={answer}
               onChange={e => setAnswer(e.target.value)}
               onKeyDown={handleKeyDown}
-              disabled={isLoading || !currentQuestion}
+              disabled={isLoading || !currentQuestion || isWaitingForQuestion}
             />
             <button
               className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-md mt-2 disabled:opacity-60"
               onClick={submitAnswer}
-              disabled={isLoading || !answer.trim() || !currentQuestion}
+              disabled={isLoading || !answer.trim() || !currentQuestion || isWaitingForQuestion}
             >
               {isLoading ? 'Submitting...' : 'Submit Answer (Ctrl+Enter)'}
             </button>

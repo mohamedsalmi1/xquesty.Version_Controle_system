@@ -1,7 +1,7 @@
 
 docker build -t stagequestsite14-05-frontend -f Dockerfile.frontend .
-docker tag stagequestsite14-05-frontend mainquesty.azurecr.io/frontend:v1.00
-docker push mainquesty.azurecr.io/frontend:v1.00
+docker tag stagequestsite14-05-frontend mainquesty.azurecr.io/frontend:v1.01
+docker push mainquesty.azurecr.io/frontend:v1.01
 az webapp restart --resource-group xQuesty --name mainquesty-frontend
 
 

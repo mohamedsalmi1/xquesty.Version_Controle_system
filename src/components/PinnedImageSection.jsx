@@ -36,7 +36,7 @@ const PinnedImageSection = () => {
     {
       id: 2,
       title: "Mentorship & Support",
-      description: "Every intern gets paired with an industry mentor who guides you through your journey, provides career advice, and helps you maximize your learning experience.",
+      description: "Our team is available 24/7 to support job seekers at every step, ensuring you never feel alone in your journey.",
       image: image3,
       color: "from-orange-500 to-red-600"
     },
