@@ -1,4 +1,9 @@
 
+
+az login --use-device-code
+az acr login --name mainquesty
+
+
 docker build -t stagequestsite14-05-frontend -f Dockerfile.frontend .
 docker tag stagequestsite14-05-frontend mainquesty.azurecr.io/frontend:v1.01
 docker push mainquesty.azurecr.io/frontend:v1.01

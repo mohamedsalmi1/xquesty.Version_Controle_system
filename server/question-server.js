@@ -109,6 +109,10 @@ app.post('/receive-answer', (req, res) => {
     stop_interview
   })
     .then(() => {
+      // After forwarding the answer, clear the current question so the next poll returns a new one
+      if (studentQueues[student_id]) {
+        studentQueues[student_id].current = null;
+      }
       res.json({ success: true });
     })
     .catch((err) => {

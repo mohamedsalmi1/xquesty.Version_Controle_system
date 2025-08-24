@@ -1,3 +1,42 @@
+// FAQ data for the FAQ section
+const faqs = [
+  {
+    question: "How can I get a job?",
+    answer: "Create an account, start your interview, and XQuesty will match you with the perfect job opportunities."
+  },
+  {
+    question: "How do companies benefit from XQuesty?",
+    answer: "Companies save time and money, hire the right people, and get access to top candidates efficiently."
+  },
+  {
+    question: "How does XQuesty work?",
+    answer: "XQuesty uses advanced algorithms to match candidates with job opportunities based on their skills, preferences, and career goals."
+  },
+  {
+    question: "Why do I need to pass an interview first?",
+    answer: "The interview helps us understand your skills, strengths, and preferences so we can find the best job match for you."
+  },
+  {
+    question: "Can XQuesty help with internships too?",
+    answer: "Yes! We connect students and interns with opportunities that match their skills and goals."
+  },
+  {
+    question: "Can XQuesty reduce our recruitment costs?",
+    answer: "Yes! By providing qualified candidates directly, you spend less on advertising, agencies, and lengthy recruitment processes."
+  },
+  {
+    question: "How fast will we receive candidate matches?",
+    answer: "Once a candidate passes their interview, they are immediately matched with your job openings."
+  },
+  {
+    question: "Can we customize candidate criteria?",
+    answer: "Yes, you can set specific requirements like skills, experience, location, and more to find the best candidates for your needs."
+  },
+  {
+    question: "How do we get started with XQuesty for our company?",
+    answer: "To get started, simply contact our sales team or sign up on our website. We'll guide you through the onboarding process and help you set up your account."
+  }
+];
 import './i18n'; // Ensure i18n is initialized before any useTranslation usage
 import React, { useState, useEffect, useRef } from "react"
 import { motion, useAnimation, AnimatePresence } from "framer-motion"
@@ -64,6 +103,9 @@ export default function App() {
   const [isHovering, setIsHovering] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  // FAQ state must be above first usage
+  const [showAllFAQ, setShowAllFAQ] = useState(false);
+  const [expandedFAQ, setExpandedFAQ] = useState(null);
   // Slider state for feature boxes
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [expandedFeature, setExpandedFeature] = useState(null);
@@ -282,7 +324,7 @@ export default function App() {
                       <iframe
                         width="100%"
                         height="100%"
-                        src="https://www.youtube.com/embed/6nGM37ThEsU"
+                        src="https://www.youtube.com/embed/eij1r7Zfbz4"
                         title="xQuesty Introduction"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -538,62 +580,51 @@ export default function App() {
                 </section>
                 {/* FAQ */}
                 <section className="container mx-auto px-4 py-8 sm:py-16">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">FAQ</h2>
-                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">How can I get a job?</h3>
-                        <p>Create an account, start your interview, and XQuesty will match you with the perfect job opportunities.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">How do companies benefit from XQuesty?</h3>
-                        <p>Companies save time and money, hire the right people, and get access to top candidates efficiently.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">How does XQuesty work?</h3>
-                        <p>XQuesty uses advanced algorithms to match candidates with job opportunities based on their skills, preferences, and career goals.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">Why do I need to pass an interview first?</h3>
-                        <p>The interview helps us understand your skills, strengths, and preferences so we can find the best job matchfor you.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">Can XQuesty help with internships too?</h3>
-                        <p>Yes! We connect students and interns with opportunities that match their skills and goals.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">Can XQuesty reduce our recruitment costs?</h3>
-                        <p>Yes! By providing qualified candidates directly, you spend less on advertising, agencies, and lengthy recruitment processes.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">How fast will we receive candidate matches?</h3>
-                        <p>Once a candidate passes their interview, they are immediately matched with your job openings.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">Can we customize candidate criteria?</h3>
-                        <p>Yes, you can set specific requirements like skills, experience, location, and more to find the best candidates for your needs.</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold text-lg mb-2">How do we get started with XQuesty for our company?</h3>
-                        <p>To get started, simply contact our sales team or sign up on our website. We'll guide you through the onboarding process and help you set up your account.</p>
-                      </CardContent>
-                    </Card>
+                  <div className="flex items-center justify-between max-w-2xl mx-auto mb-4">
+                    <span className="text-lg font-semibold text-left">Top questions</span>
+                    <button
+                      className="text-rose-500 font-semibold focus:outline-none hover:underline"
+                      onClick={() => setShowAllFAQ((prev) => !prev)}
+                    >
+                      {showAllFAQ ? 'View less' : 'View more'}
+                    </button>
+                  </div>
+                  <div className="flex flex-col gap-4 max-w-2xl mx-auto">
+                    {(showAllFAQ ? faqs : faqs.slice(0, 4)).map((faq, idx) => {
+                      const realIdx = showAllFAQ ? idx : idx;
+                      return (
+                        <Card key={realIdx}>
+                          <button
+                            className="w-full text-left flex items-center justify-between p-6 focus:outline-none"
+                            onClick={() => setExpandedFAQ(realIdx === expandedFAQ ? null : realIdx)}
+                            aria-expanded={expandedFAQ === realIdx}
+                          >
+                            <span className="font-semibold text-lg">{faq.question}</span>
+                            <span className="ml-4">
+                              {expandedFAQ === realIdx ? (
+                                <span className="text-2xl text-rose-500">-</span>
+                              ) : (
+                                <span className="text-2xl text-rose-500">+</span>
+                              )}
+                            </span>
+                          </button>
+                          <AnimatePresence initial={false}>
+                            {expandedFAQ === realIdx && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.25 }}
+                              >
+                                <div className="px-6 pb-6 text-gray-700">
+                                  {faq.answer}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </Card>
+                      );
+                    })}
                   </div>
                 </section>
               </>
