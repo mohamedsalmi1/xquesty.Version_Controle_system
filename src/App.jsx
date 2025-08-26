@@ -38,7 +38,7 @@ const faqs = [
   }
 ];
 import './i18n'; // Ensure i18n is initialized before any useTranslation usage
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react"
 import { useTranslation, Trans } from 'react-i18next';
 import { motion, useAnimation, AnimatePresence } from "framer-motion"
 import ChatForm from "@/components/ChatForm"
@@ -97,23 +97,9 @@ const partners = [
   ]
 ]
 
-export default function App() {
-  const { t } = useTranslation();
-  const [showForm, setShowForm] = useState(false)
-  const videoRef = useRef(null)
-  const controls = useAnimation()
-  const [isHovering, setIsHovering] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  // FAQ state must be above first usage
-  const [showAllFAQ, setShowAllFAQ] = useState(false);
-  const [expandedFAQ, setExpandedFAQ] = useState(null);
-  // Slider state for feature boxes
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [expandedFeature, setExpandedFeature] = useState(null);
-  const navigate = useNavigate();
 
-  // Feature data for the slider
+export default function App() {
+  // Feature data for the slider (move this above all code that references it)
   const features = [
     {
       id: 'smart-matching',
@@ -153,13 +139,102 @@ export default function App() {
     }
   ];
 
+  const { t } = useTranslation();
+  const [showForm, setShowForm] = useState(false)
+  const videoRef = useRef(null)
+  const controls = useAnimation()
+  const [isHovering, setIsHovering] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  // FAQ state must be above first usage
+  const [showAllFAQ, setShowAllFAQ] = useState(false);
+  const [expandedFAQ, setExpandedFAQ] = useState(null);
+  // Slider state for feature boxes
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [expandedFeature, setExpandedFeature] = useState(null);
+
+  // Slider constants
+  const CARD_WIDTH = 300;
+  const CARD_GAP = 16; // gap-4 = 1rem = 16px
+  const EXPANDED_WIDTH = 600;
+  const VISIBLE_CARDS = 3;
+
+  const sliderContainerRef = useRef(null);
+  const sliderTrackRef = useRef(null);
+
+  // Helper to get the width of a card (expanded or not)
+  const getCardWidth = (featureId) =>
+    expandedFeature === featureId ? EXPANDED_WIDTH : CARD_WIDTH;
+
+  // Calculate the total width of all cards (for the track)
+  const getTotalTrackWidth = () => {
+    return features.reduce(
+      (acc, f) => acc + (expandedFeature === f.id ? EXPANDED_WIDTH : CARD_WIDTH),
+      0
+    ) + (features.length - 1) * CARD_GAP;
+  };
+
+  // Ensure expanded card is fully visible in the container
+  const getSliderTranslate = () => {
+    // Find the left offset of the expanded card
+    let x = 0;
+    for (let i = 0; i < currentSlideIndex; i++) {
+      x += (expandedFeature === features[i].id ? EXPANDED_WIDTH : CARD_WIDTH) + CARD_GAP;
+    }
+    // If expanded, ensure it's fully visible
+    if (expandedFeature) {
+      const expandedIdx = features.findIndex(f => f.id === expandedFeature);
+      let left = 0;
+      for (let i = 0; i < expandedIdx; i++) {
+        left += (expandedFeature === features[i].id ? EXPANDED_WIDTH : CARD_WIDTH) + CARD_GAP;
+      }
+      const containerWidth = sliderContainerRef.current ? sliderContainerRef.current.offsetWidth : CARD_WIDTH * VISIBLE_CARDS + CARD_GAP * (VISIBLE_CARDS - 1);
+      const expandedCardWidth = EXPANDED_WIDTH;
+      // If expanded card would overflow right, shift left
+      if (left + expandedCardWidth > x + containerWidth) {
+        x = left + expandedCardWidth - containerWidth;
+      }
+      // If expanded card is before currentSlideIndex, shift right
+      if (left < x) {
+        x = left;
+      }
+    }
+    return -x;
+  };
+
+  // Dynamically set track width and update on resize/expand/collapse
+  useLayoutEffect(() => {
+    const setTrackWidth = () => {
+      if (sliderTrackRef.current) {
+        sliderTrackRef.current.style.width = getTotalTrackWidth() + "px";
+      }
+    };
+    setTrackWidth();
+    window.addEventListener("resize", setTrackWidth);
+    return () => window.removeEventListener("resize", setTrackWidth);
+  }, [expandedFeature, features.length]);
+
+  // Calculate the max slide index so last card is always fully visible
+  const getMaxSlideIndex = () => {
+    // If expanded card is in the last VISIBLE_CARDS, adjust so it fits
+    let maxIndex = features.length - VISIBLE_CARDS;
+    if (expandedFeature) {
+      const expandedIdx = features.findIndex(f => f.id === expandedFeature);
+      if (expandedIdx >= features.length - VISIBLE_CARDS) {
+        maxIndex = Math.max(0, expandedIdx - VISIBLE_CARDS + 1);
+      }
+    }
+    return Math.max(0, maxIndex);
+  };
+
+  const navigate = useNavigate();
+
   const toggleFeature = (featureId) => {
     setExpandedFeature(expandedFeature === featureId ? null : featureId);
   };
 
   const nextSlide = () => {
-    const maxSlideIndex = features.length - 3.7; // Show fewer boxes at a time due to larger width
-    setCurrentSlideIndex((prev) => Math.min(prev + 1, maxSlideIndex));
+    setCurrentSlideIndex((prev) => Math.min(prev + 1, getMaxSlideIndex()));
   };
 
   const prevSlide = () => {
@@ -454,7 +529,8 @@ export default function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="max-w-7xl mx-auto"
+                    className="mx-auto"
+                    style={{ maxWidth: '968px' /* 600+300+16*2+padding, adjust as needed */ }}
                   >
                     <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-900 font-outfit" dir="auto">
                       <Trans i18nKey="unique.title" components={{ 1: <span className="text-blue-600 hover:text-black transition-colors cursor-pointer" /> }}>
@@ -463,65 +539,59 @@ export default function App() {
                     </h1>
 
                     {/* Slider Container */}
-                    <div className="relative overflow-hidden max-w-6xl mx-auto">
+                    <div
+                      className="relative overflow-hidden mx-auto"
+                      ref={sliderContainerRef}
+                      style={{ width: "100%" }}
+                    >
                       <motion.div
                         className="flex gap-4"
-                        animate={{ 
-                          x: `${-currentSlideIndex * (expandedFeature ? 320 : 304)}px` 
-                        }}
-                        transition={{ 
+                        ref={sliderTrackRef}
+                        animate={{ x: getSliderTranslate() }}
+                        transition={{
                           type: "spring",
                           stiffness: 300,
                           damping: 30,
                           mass: 0.8
                         }}
-                        drag="x"
-                        dragConstraints={{ 
-                          left: -(features.length - 3) * 304, 
-                          right: 0 
-                        }}
-                        dragElastic={0.1}
-                        onDragEnd={(e, { offset, velocity }) => {
-                          const swipe = swipePower(offset.x, velocity.x);
-                          if (swipe < -swipeConfidenceThreshold) {
-                            nextSlide();
-                          } else if (swipe > swipeConfidenceThreshold) {
-                            prevSlide();
-                          }
+                        style={{
+                          willChange: "transform",
+                          transition: "width 0.3s cubic-bezier(0.4,0,0.2,1)"
                         }}
                       >
                         {features.map((feature, index) => {
                           const IconComponent = feature.icon;
                           const isExpanded = expandedFeature === feature.id;
-                          const isVisible = index >= currentSlideIndex && index < currentSlideIndex + 3;
-                          
+                          // Show all cards, but fade/scale those not in view
+                          // Optionally, you can hide those not in view for perf
+                          const isVisible = index >= currentSlideIndex && index < currentSlideIndex + VISIBLE_CARDS;
                           return (
                             <motion.div
                               key={feature.id}
                               className="flex-shrink-0"
                               initial={false}
-                              animate={{ 
-                                width: isExpanded ? "600px" : "300px",
+                              animate={{
+                                width: isExpanded ? `${EXPANDED_WIDTH}px` : `${CARD_WIDTH}px`,
                                 scale: isVisible ? 1 : 0.95,
                                 opacity: isVisible ? 1 : 0.7
                               }}
-                              transition={{ 
+                              transition={{
                                 type: "spring",
                                 stiffness: 400,
                                 damping: 35,
                                 mass: 0.6
                               }}
-                              whileHover={{ 
+                              whileHover={{
                                 y: -4,
-                                transition: { 
-                                  type: "spring", 
-                                  stiffness: 400, 
-                                  damping: 25 
+                                transition: {
+                                  type: "spring",
+                                  stiffness: 400,
+                                  damping: 25
                                 }
                               }}
                               whileTap={{ scale: 0.98 }}
                             >
-                              <div 
+                              <div
                                 className={`h-80 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${
                                   isExpanded ? 'shadow-2xl ring-2 ring-blue-100' : 'hover:shadow-xl'
                                 }`}
@@ -542,12 +612,10 @@ export default function App() {
                                       }`} />
                                     </div>
                                   </motion.div>
-                                  
                                   {/* Title */}
                                   <h3 className="text-xl font-bold text-gray-900 text-center mb-6 leading-tight">
                                     {feature.title(t)}
                                   </h3>
-                                  
                                   {/* Content Area */}
                                   <div className="flex-1 flex flex-col justify-center">
                                     <AnimatePresence mode="wait">
@@ -616,10 +684,9 @@ export default function App() {
                       >
                         <ChevronLeft className="h-6 w-6" />
                       </motion.button>
-                      
                       {/* Slide Indicators */}
                       <div className="flex gap-2">
-                        {Array.from({ length: Math.max(1, features.length - 2) }, (_, i) => (
+                        {Array.from({ length: getMaxSlideIndex() + 1 }, (_, i) => (
                           <motion.button
                             key={i}
                             onClick={() => setCurrentSlideIndex(i)}
@@ -634,14 +701,13 @@ export default function App() {
                           />
                         ))}
                       </div>
-                      
                       <motion.button
                         onClick={nextSlide}
-                        disabled={currentSlideIndex === features.length - 3}
-                        whileHover={currentSlideIndex !== features.length - 3 ? { scale: 1.05 } : {}}
-                        whileTap={currentSlideIndex !== features.length - 3 ? { scale: 0.95 } : {}}
+                        disabled={currentSlideIndex === getMaxSlideIndex()}
+                        whileHover={currentSlideIndex !== getMaxSlideIndex() ? { scale: 1.05 } : {}}
+                        whileTap={currentSlideIndex !== getMaxSlideIndex() ? { scale: 0.95 } : {}}
                         className={`p-2 rounded-full shadow-lg transition-all duration-200 border border-gray-200 ${
-                          currentSlideIndex === features.length - 3
+                          currentSlideIndex === getMaxSlideIndex()
                             ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                             : 'bg-white hover:bg-gray-50 text-gray-600 hover:shadow-xl'
                         }`}

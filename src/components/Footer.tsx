@@ -21,7 +21,7 @@ export function Footer() {
                 style={{ minWidth: 32 }}
               />
             </div>
-            <p className="text-muted-foreground" style={{ whiteSpace: 'pre-line' }}>{t("footer.slogan", { defaultValue: "We don't offer listings—we place you inside. \n Real internships, real companies, real experience. \n You're not browsing. You're building." })}</p>
+            <p className="text-muted-foreground" style={{ whiteSpace: 'pre-line'}}>{t("footer.slogan", { defaultValue: "We don't offer listings—we place you inside. \n Real internships, real companies, real experience. \n You're not browsing. You're building." })}</p>
           </div>
 
           {/* Links, Contact, Follow Us on the right */}
