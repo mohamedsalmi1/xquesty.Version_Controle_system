@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, Github, Linkedin } from 'lucide-react';
+import LanguageSelector from './LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
 
@@ -10,7 +11,8 @@ export function Footer() {
     <footer className="bg-white border-t mt-8 sm:mt-16">     
       <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className="flex flex-col sm:flex-row justify-between items-start gap-8">
-          <div className="space-y-4 w-full sm:w-auto">
+          {/* Website description on the left */}
+          <div className="space-y-4 w-full sm:w-1/2">
             <div className="flex items-center gap-2">
               <img
                 alt="xQuesty Logo"
@@ -19,10 +21,11 @@ export function Footer() {
                 style={{ minWidth: 32 }}
               />
             </div>
-            <p className="text-muted-foreground" style={{ whiteSpace: 'pre-line' }}>{t("We don't offer listings—we place you inside. \n Real internships, real companies, real experience. \n You're not browsing. You're building.")}</p>
+            <p className="text-muted-foreground" style={{ whiteSpace: 'pre-line' }}>{t("footer.slogan", { defaultValue: "We don't offer listings—we place you inside. \n Real internships, real companies, real experience. \n You're not browsing. You're building." })}</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:flex sm:flex-row gap-8 w-full sm:w-auto">
+          {/* Links, Contact, Follow Us on the right */}
+          <div className="w-full sm:w-1/2 flex flex-col sm:flex-row gap-8 justify-end">
             <div>
               <h3 className="font-semibold mb-3 sm:mb-4">{t('Quick Links')}</h3>
               <ul className="space-y-2">
@@ -56,7 +59,7 @@ export function Footer() {
               </ul>
             </div>
 
-            <div className="col-span-2 sm:col-span-1">
+            <div>
               <h3 className="font-semibold mb-3 sm:mb-4">{t('Follow Us')}</h3>
               <div className="flex gap-4">
                 <a href="#" className="text-muted-foreground hover:text-foreground">
@@ -69,17 +72,20 @@ export function Footer() {
             </div>
           </div>
         </div>
+        
+        {/* Language Selector */}
+        <LanguageSelector />
 
-        <div className="border-t mt-6 sm:mt-8 pt-6 sm:pt-8">
-          <p className="text-muted-foreground italic text-center w-full" 
+        <div className="border-t mt-6 sm:mt-8 pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-muted-foreground italic text-center w-full sm:w-auto" 
              style={{ 
                fontFamily: "'Times New Roman', serif", 
                fontSize: "clamp(1.25rem, 4vw, 1.875rem)", 
                fontStyle: "italic", 
                opacity: 0.6 
              }}>
-            {t("You're not browsing. You're building.")}
-          </p>       
+            {t("footer.slogan_short", { defaultValue: "You're not browsing. You're building." })}
+          </p>
         </div>
       </div>
     </footer>

@@ -21,29 +21,33 @@ const PinnedImageSection = () => {
   const sections = [
     {
       id: 0,
-      title: "AI-Powered Matching",
-      description: "Our advanced algorithms analyze your skills, preferences, and career goals to connect you with the perfect Job / Internship opportunities. No more endless scrolling through irrelevant listings.",
+      title: t('pinned.0.title', { defaultValue: "AI-Powered Matching" }),
+      description: t('pinned.0.desc', { defaultValue: "Our advanced algorithms analyze your skills, preferences, and career goals to connect you with the perfect Job / Internship opportunities. No more endless scrolling through irrelevant listings." }),
+      badge: t('pinned.0.badge', { defaultValue: "SKILLS VALIDATION" }),
       image: image1,
       color: "from-blue-500 to-purple-600"
     },
     {
       id: 1,
-      title: "Direct Company Placement",
-      description: "Skip the middleman. We work directly with top companies to place you in meaningful roles where you'll gain real-world experience and make lasting connections.",
+      title: t('pinned.1.title', { defaultValue: "Direct Company Placement" }),
+      description: t('pinned.1.desc', { defaultValue: "Skip the middleman. We work directly with top companies to place you in meaningful roles where you'll gain real-world experience and make lasting connections." }),
+      badge: t('pinned.1.badge', { defaultValue: "SKILLS VALIDATION" }),
       image: image2,
       color: "from-green-500 to-teal-600"
     },
     {
       id: 2,
-      title: "Mentorship & Support",
-      description: "Our team is available 24/7 to support job seekers at every step, ensuring you never feel alone in your journey.",
+      title: t('pinned.2.title', { defaultValue: "Mentorship & Support" }),
+      description: t('pinned.2.desc', { defaultValue: "Our team is available 24/7 to support job seekers at every step, ensuring you never feel alone in your journey." }),
+      badge: t('pinned.2.badge', { defaultValue: "SKILLS VALIDATION" }),
       image: image3,
       color: "from-orange-500 to-red-600"
     },
     {
       id: 3,
-      title: "Career Development",
-      description: "Access exclusive workshops, skill-building sessions, and networking events designed to accelerate your professional growth and expand your industry knowledge.",
+      title: t('pinned.3.title', { defaultValue: "Career Development" }),
+      description: t('pinned.3.desc', { defaultValue: "Access exclusive workshops, skill-building sessions, and networking events designed to accelerate your professional growth and expand your industry knowledge." }),
+      badge: t('pinned.3.badge', { defaultValue: "SKILLS VALIDATION" }),
       image: image4,
       color: "from-purple-500 to-pink-600"
     }
@@ -89,7 +93,7 @@ const PinnedImageSection = () => {
                   whileInView={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
                 >
-                  SKILLS VALIDATION
+                  {section.badge}
                 </motion.div>
                 
                 <motion.h3
@@ -183,7 +187,7 @@ const PinnedImageSection = () => {
                 </div>
                 <div>
                   <div className={`inline-block px-4 py-2 rounded-full bg-gradient-to-r ${section.color} text-white text-sm font-medium mb-4`}>
-                    SKILLS VALIDATION
+                    {section.badge}
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{section.description}</p>

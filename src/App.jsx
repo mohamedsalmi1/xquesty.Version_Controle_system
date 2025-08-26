@@ -1,44 +1,45 @@
 // FAQ data for the FAQ section
 const faqs = [
   {
-    question: "How can I get a job?",
-    answer: "Create an account, start your interview, and XQuesty will match you with the perfect job opportunities."
+    question: (t) => t('faq.0.q', { defaultValue: "How can I get a job?" }),
+    answer: (t) => t('faq.0.a', { defaultValue: "Create an account, start your interview, and XQuesty will match you with the perfect job opportunities." })
   },
   {
-    question: "How do companies benefit from XQuesty?",
-    answer: "Companies save time and money, hire the right people, and get access to top candidates efficiently."
+    question: (t) => t('faq.1.q', { defaultValue: "How do companies benefit from XQuesty?" }),
+    answer: (t) => t('faq.1.a', { defaultValue: "Companies save time and money, hire the right people, and get access to top candidates efficiently." })
   },
   {
-    question: "How does XQuesty work?",
-    answer: "XQuesty uses advanced algorithms to match candidates with job opportunities based on their skills, preferences, and career goals."
+    question: (t) => t('faq.2.q', { defaultValue: "How does XQuesty work?" }),
+    answer: (t) => t('faq.2.a', { defaultValue: "XQuesty uses advanced algorithms to match candidates with job opportunities based on their skills, preferences, and career goals." })
   },
   {
-    question: "Why do I need to pass an interview first?",
-    answer: "The interview helps us understand your skills, strengths, and preferences so we can find the best job match for you."
+    question: (t) => t('faq.3.q', { defaultValue: "Why do I need to pass an interview first?" }),
+    answer: (t) => t('faq.3.a', { defaultValue: "The interview helps us understand your skills, strengths, and preferences so we can find the best job match for you." })
   },
   {
-    question: "Can XQuesty help with internships too?",
-    answer: "Yes! We connect students and interns with opportunities that match their skills and goals."
+    question: (t) => t('faq.4.q', { defaultValue: "Can XQuesty help with internships too?" }),
+    answer: (t) => t('faq.4.a', { defaultValue: "Yes! We connect students and interns with opportunities that match their skills and goals." })
   },
   {
-    question: "Can XQuesty reduce our recruitment costs?",
-    answer: "Yes! By providing qualified candidates directly, you spend less on advertising, agencies, and lengthy recruitment processes."
+    question: (t) => t('faq.5.q', { defaultValue: "Can XQuesty reduce our recruitment costs?" }),
+    answer: (t) => t('faq.5.a', { defaultValue: "Yes! By providing qualified candidates directly, you spend less on advertising, agencies, and lengthy recruitment processes." })
   },
   {
-    question: "How fast will we receive candidate matches?",
-    answer: "Once a candidate passes their interview, they are immediately matched with your job openings."
+    question: (t) => t('faq.6.q', { defaultValue: "How fast will we receive candidate matches?" }),
+    answer: (t) => t('faq.6.a', { defaultValue: "Once a candidate passes their interview, they are immediately matched with your job openings." })
   },
   {
-    question: "Can we customize candidate criteria?",
-    answer: "Yes, you can set specific requirements like skills, experience, location, and more to find the best candidates for your needs."
+    question: (t) => t('faq.7.q', { defaultValue: "Can we customize candidate criteria?" }),
+    answer: (t) => t('faq.7.a', { defaultValue: "Yes, you can set specific requirements like skills, experience, location, and more to find the best candidates for your needs." })
   },
   {
-    question: "How do we get started with XQuesty for our company?",
-    answer: "To get started, simply contact our sales team or sign up on our website. We'll guide you through the onboarding process and help you set up your account."
+    question: (t) => t('faq.8.q', { defaultValue: "How do we get started with XQuesty for our company?" }),
+    answer: (t) => t('faq.8.a', { defaultValue: "To get started, simply contact our sales team or sign up on our website. We'll guide you through the onboarding process and help you set up your account." })
   }
 ];
 import './i18n'; // Ensure i18n is initialized before any useTranslation usage
 import React, { useState, useEffect, useRef } from "react"
+import { useTranslation, Trans } from 'react-i18next';
 import { motion, useAnimation, AnimatePresence } from "framer-motion"
 import ChatForm from "@/components/ChatForm"
 import { Card, CardContent } from "@/components/ui/card"
@@ -97,6 +98,7 @@ const partners = [
 ]
 
 export default function App() {
+  const { t } = useTranslation();
   const [showForm, setShowForm] = useState(false)
   const videoRef = useRef(null)
   const controls = useAnimation()
@@ -115,51 +117,39 @@ export default function App() {
   const features = [
     {
       id: 'smart-matching',
-      title: 'Automated Workflows',
+      title: (t) => t('features.automated_workflows.title', { defaultValue: 'Automated Workflows' }),
       icon: Brain,
-      description: 'With xQuesty, companies save time on hiring and job seekers get faster opportunities. No more wasted effort just the right match, quicker.'
+      description: (t) => t('features.automated_workflows.desc', { defaultValue: 'With XQuesty’s AI solution, companies save time on hiring while job seekers get faster opportunities. No more wasted effort—just the right match, instantly.' })
     },
     {
       id: 'direct-placement',
-      title: 'Direct Placement',
+      title: (t) => t('features.direct_placement.title', { defaultValue: 'Direct Placement' }),
       icon: Target,
-      description: 'We don\'t just show you listings we place you directly inside companies. Our exclusive partnerships ensure real Job / Internship opportunities with guaranteed mentorship and meaningful projects.'
+      description: (t) => t('features.direct_placement.desc', { defaultValue: 'XQuesty’s AI-powered solution doesn’t just show you listings—we place you directly inside companies. Our exclusive partnerships deliver real jobs and internships with guaranteed mentorship and meaningful projects.' })
     },
-    // {
-    //   id: 'success-stories',
-    //   title: 'Success Stories',
-    //   icon: TrendingUp,
-    //   description: 'Our approach is validated by real results: 95% of our interns receive full-time offers, 87% report significant skill development, and 92% say their xQuesty internship was pivotal to their career growth.'
-    // },
     {
       id: 'end-to-end',
-      title: 'End-to-End Support',
+      title: (t) => t('features.end_to_end.title', { defaultValue: 'End-to-End Support' }),
       icon: Users,
-      description: 'We provide fast, reliable support at every stage helping companies hire efficiently while guiding job seekers and interns with the tools and advice they need to succeed.'
+      description: (t) => t('features.end_to_end.desc', { defaultValue: 'We provide fast, reliable support at every stage—helping companies hire efficiently while guiding job seekers and interns with the tools and advice they need to succeed.' })
     },
     {
       id: 'industry-network',
-      title: 'Your Gateway to Exclusive Roles',
+      title: (t) => t('features.industry_network.title', { defaultValue: 'Your Gateway to Exclusive Roles' }),
       icon: Network,
-      description: 'Gain access to Jobs that aren\'t publicly advertised. Our network of industry partners trusts us to send them top talent, giving you access to premium opportunities.'
+      description: (t) => t('features.industry_network.desc', { defaultValue: 'Gain access to jobs that aren\'t publicly advertised. Our network of industry partners trusts us to send them top talent, giving you access to premium opportunities.' })
     },
     {
       id: 'Backed by science',
-      title: 'Hire with Confidence',
+      title: (t) => t('features.hire_confidence.title', { defaultValue: 'Hire with Confidence' }),
       icon: BookOpen,
-      description: 'Goodbye gut feeling, hello data-driven decisions. xQuesty’s science-backed evaluations help you more accurately predict job performance, so you can hire with confidence and build stronger teams.'
+      description: (t) => t('features.hire_confidence.desc', { defaultValue: 'Goodbye gut feeling, hello AI-driven decisions. xQuesty’s science-backed evaluations help you more accurately predict job performance, so you can hire with confidence and build stronger teams.' })
     },
-    // {
-    //   id: 'career-coaching',
-    //   title: 'Career Coaching',
-    //   icon: MessageCircle,
-    //   description: 'Every xQuesty student gets paired with a personal career coach who provides ongoing guidance, helps navigate workplace challenges, and plans long-term career trajectory.'
-    // },
     {
       id: 'alumni-network',
-      title: 'Save Time and Money',
+      title: (t) => t('features.save_time_money.title', { defaultValue: 'Save Time and Money' }),
       icon: UserCheck,
-      description: 'xQuesty helps companies hire smarter by reducing the time and money spent on recruitment. Our data-driven evaluations quickly identify the best candidates, so you can make confident decisions, minimize hiring mistakes, and focus your resources where they matter most.'
+      description: (t) => t('features.save_time_money.desc', { defaultValue: 'xQuesty helps companies hire smarter by reducing the time and money spent on recruitment. Our data-driven evaluations quickly identify the best candidates, so you can make confident decisions, minimize hiring mistakes, and focus your resources where they matter most.' })
     }
   ];
 
@@ -300,17 +290,27 @@ export default function App() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
+                    dir="auto"
                   >
-                    Leave it to <span className="gradient-text">xQuesty</span>
+                    <Trans i18nKey="hero.title" components={{ 1: <span className="gradient-text" /> }}>
+                      Leave it to <span className="gradient-text">xQuesty</span>
+                    </Trans>
                   </motion.h1>
                   <motion.p
                     className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-2"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.6 }}
+                    dir="auto"
                   >
-                    We don't offer listings. we place you inside. Real jobs & internships, real companies, real experience. You're not browsing. You're building.
+                    {t('hero.subtitle', { defaultValue: "Tired of searching for jobs? our AI connects you directly with real jobs and internships at real companies, You’re not searching, you’re building your future." })}
                   </motion.p>
+                  {/* We don't offer listings. we place you inside. Real jobs & internships, real companies, real experience. You're not browsing. You're building. */}
+
+
+
+                  {/* youtube video in the home page */}
+                  {/*
                   <motion.div
                     className="youtube-container mb-8"
                     ref={videoRef}
@@ -356,6 +356,10 @@ export default function App() {
                       </div>
                     )}
                   </motion.div>
+                  */}
+
+
+
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -425,8 +429,9 @@ export default function App() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6 }}
                       viewport={{ once: true }}
+                      dir="auto"
                     >
-                      How xQuesty Works
+                      {t('how_works.title', { defaultValue: 'How xQuesty Works' })}
                     </motion.h2>
                     <motion.p
                       className="text-lg text-gray-600 max-w-2xl mx-auto"
@@ -434,8 +439,9 @@ export default function App() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.2 }}
                       viewport={{ once: true }}
+                      dir="auto"
                     >
-                      Discover the step-by-step process that transforms your Job / Internship search into a guaranteed placement
+                      {t('how_works.subtitle', { defaultValue: 'Discover the step-by-step process that transforms your Job / Internship search into a guaranteed placement' })}
                     </motion.p>
                   </div>
                   <PinnedImageSection />
@@ -450,46 +456,96 @@ export default function App() {
                     viewport={{ once: true }}
                     className="max-w-7xl mx-auto"
                   >
-                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-900 font-outfit">
-                      What makes xQuesty <span className="text-blue-600 hover:text-black transition-colors cursor-pointer">unique</span>?
+                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-900 font-outfit" dir="auto">
+                      <Trans i18nKey="unique.title" components={{ 1: <span className="text-blue-600 hover:text-black transition-colors cursor-pointer" /> }}>
+                        What makes xQuesty <span className="text-blue-600 hover:text-black transition-colors cursor-pointer">unique</span>?
+                      </Trans>
                     </h1>
 
                     {/* Slider Container */}
                     <div className="relative overflow-hidden max-w-6xl mx-auto">
                       <motion.div
                         className="flex gap-4"
-                        animate={{ x: `${-currentSlideIndex * 320}px` }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        animate={{ 
+                          x: `${-currentSlideIndex * (expandedFeature ? 320 : 304)}px` 
+                        }}
+                        transition={{ 
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                          mass: 0.8
+                        }}
+                        drag="x"
+                        dragConstraints={{ 
+                          left: -(features.length - 3) * 304, 
+                          right: 0 
+                        }}
+                        dragElastic={0.1}
+                        onDragEnd={(e, { offset, velocity }) => {
+                          const swipe = swipePower(offset.x, velocity.x);
+                          if (swipe < -swipeConfidenceThreshold) {
+                            nextSlide();
+                          } else if (swipe > swipeConfidenceThreshold) {
+                            prevSlide();
+                          }
+                        }}
                       >
                         {features.map((feature, index) => {
                           const IconComponent = feature.icon;
                           const isExpanded = expandedFeature === feature.id;
+                          const isVisible = index >= currentSlideIndex && index < currentSlideIndex + 3;
                           
                           return (
                             <motion.div
                               key={feature.id}
                               className="flex-shrink-0"
-                              layout
+                              initial={false}
                               animate={{ 
-                                width: isExpanded ? "600px" : "300px"
+                                width: isExpanded ? "600px" : "300px",
+                                scale: isVisible ? 1 : 0.95,
+                                opacity: isVisible ? 1 : 0.7
                               }}
-                              transition={{ duration: 0.4, ease: "easeInOut" }}
+                              transition={{ 
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 35,
+                                mass: 0.6
+                              }}
+                              whileHover={{ 
+                                y: -4,
+                                transition: { 
+                                  type: "spring", 
+                                  stiffness: 400, 
+                                  damping: 25 
+                                }
+                              }}
+                              whileTap={{ scale: 0.98 }}
                             >
                               <div 
-                                className="h-80 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"
+                                className={`h-80 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${
+                                  isExpanded ? 'shadow-2xl ring-2 ring-blue-100' : 'hover:shadow-xl'
+                                }`}
                                 onClick={() => toggleFeature(feature.id)}
                               >
                                 <div className="p-6 h-full flex flex-col">
                                   {/* Icon */}
-                                  <div className="flex justify-center mb-6">
-                                    <div className="p-4 bg-blue-100 rounded-full">
-                                      <IconComponent className="h-10 w-10 text-blue-600" />
+                                  <motion.div 
+                                    className="flex justify-center mb-6"
+                                    whileHover={{ scale: 1.1 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                  >
+                                    <div className={`p-4 rounded-full transition-all duration-300 ${
+                                      isExpanded ? 'bg-blue-200' : 'bg-blue-100'
+                                    }`}>
+                                      <IconComponent className={`h-10 w-10 transition-colors duration-300 ${
+                                        isExpanded ? 'text-blue-700' : 'text-blue-600'
+                                      }`} />
                                     </div>
-                                  </div>
+                                  </motion.div>
                                   
                                   {/* Title */}
                                   <h3 className="text-xl font-bold text-gray-900 text-center mb-6 leading-tight">
-                                    {feature.title}
+                                    {feature.title(t)}
                                   </h3>
                                   
                                   {/* Content Area */}
@@ -498,27 +554,39 @@ export default function App() {
                                       {!isExpanded ? (
                                         <motion.div
                                           key={`collapsed-${feature.id}`}
-                                          initial={{ opacity: 0 }}
-                                          animate={{ opacity: 1 }}
-                                          exit={{ opacity: 0 }}
-                                          transition={{ duration: 0.2 }}
+                                          initial={{ opacity: 0, y: 10 }}
+                                          animate={{ opacity: 1, y: 0 }}
+                                          exit={{ opacity: 0, y: -10 }}
+                                          transition={{ 
+                                            type: "spring",
+                                            stiffness: 300,
+                                            damping: 25
+                                          }}
                                           className="text-center"
                                         >
-                                          <button className="text-blue-600 hover:text-blue-700 font-bold text-lg transition-colors underline">
-                                            Learn More
+                                          <button 
+                                            className="text-blue-600 hover:text-blue-700 font-bold text-lg transition-all duration-200 underline hover:no-underline transform hover:scale-105" 
+                                            dir="auto"
+                                          >
+                                            {t('features.learn_more', { defaultValue: 'Learn More' })}
                                           </button>
                                         </motion.div>
                                       ) : (
                                         <motion.div
                                           key={`expanded-${feature.id}`}
-                                          initial={{ opacity: 0 }}
-                                          animate={{ opacity: 1 }}
-                                          exit={{ opacity: 0 }}
-                                          transition={{ duration: 0.3, delay: 0.1 }}
+                                          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                                          exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                          transition={{ 
+                                            type: "spring",
+                                            stiffness: 300,
+                                            damping: 25,
+                                            delay: 0.1
+                                          }}
                                           className="text-left"
                                         >
                                           <p className="text-gray-600 leading-relaxed text-base font-medium">
-                                            {feature.description}
+                                            {feature.description(t)}
                                           </p>
                                         </motion.div>
                                       )}
@@ -532,61 +600,94 @@ export default function App() {
                       </motion.div>
                     </div>
 
-                    {/* Navigation Controls - Moved Below */}
+                    {/* Navigation Controls */}
                     <div className="flex justify-center items-center mt-8 gap-4">
-                      <button
+                      <motion.button
                         onClick={prevSlide}
                         disabled={currentSlideIndex === 0}
-                        className={`p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 border border-gray-200 ${
+                        whileHover={currentSlideIndex !== 0 ? { scale: 1.05 } : {}}
+                        whileTap={currentSlideIndex !== 0 ? { scale: 0.95 } : {}}
+                        className={`p-2 rounded-full shadow-lg transition-all duration-200 border border-gray-200 ${
                           currentSlideIndex === 0 
                             ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                            : 'bg-white hover:bg-gray-50 text-gray-600'
+                            : 'bg-white hover:bg-gray-50 text-gray-600 hover:shadow-xl'
                         }`}
                         aria-label="Previous feature"
                       >
                         <ChevronLeft className="h-6 w-6" />
-                      </button>
+                      </motion.button>
                       
-                      <button
+                      {/* Slide Indicators */}
+                      <div className="flex gap-2">
+                        {Array.from({ length: Math.max(1, features.length - 2) }, (_, i) => (
+                          <motion.button
+                            key={i}
+                            onClick={() => setCurrentSlideIndex(i)}
+                            whileHover={{ scale: 1.2 }}
+                            whileTap={{ scale: 0.9 }}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                              i === currentSlideIndex 
+                                ? 'bg-blue-600 w-6' 
+                                : 'bg-gray-300 hover:bg-gray-400'
+                            }`}
+                            aria-label={`Go to slide ${i + 1}`}
+                          />
+                        ))}
+                      </div>
+                      
+                      <motion.button
                         onClick={nextSlide}
                         disabled={currentSlideIndex === features.length - 3}
-                        className={`p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 border border-gray-200 ${
+                        whileHover={currentSlideIndex !== features.length - 3 ? { scale: 1.05 } : {}}
+                        whileTap={currentSlideIndex !== features.length - 3 ? { scale: 0.95 } : {}}
+                        className={`p-2 rounded-full shadow-lg transition-all duration-200 border border-gray-200 ${
                           currentSlideIndex === features.length - 3
                             ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                            : 'bg-white hover:bg-gray-50 text-gray-600'
+                            : 'bg-white hover:bg-gray-50 text-gray-600 hover:shadow-xl'
                         }`}
                         aria-label="Next feature"
                       >
                         <ChevronRight className="h-6 w-6" />
-                      </button>
+                      </motion.button>
                     </div>
 
                     {/* Mobile-friendly touch indicators */}
                     <div className="flex justify-center mt-4 md:hidden">
                       <p className="text-sm text-gray-500">
-                        Tap a box to learn more • Use arrows to navigate
+                        {t('unique.mobile_hint', { defaultValue: 'Tap a box to learn more • Swipe or use arrows to navigate' })}
                       </p>
                     </div>
                   </motion.div>
                 </section>
+
+                {/* Add these helper functions and constants to your component */}
+                {/* Swipe helper functions/constants for feature slider */}
+                {/* Place these at the top-level of your App component */}
+
+
+
                 {/* About */}
                 <section className="container mx-auto px-4 py-8 sm:py-16 text-center">
-                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">About xQuesty</h2>
-                  <p className="max-w-2xl mx-auto text-base sm:text-lg mb-6 sm:mb-8 px-2">
-                    xQuesty makes finding the right job fast and simple for candidates, 
-                    while helping HR teams make the right hiring decisions, 
-                    reduce recruitment costs, and save time.
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6" dir="auto">
+                    {t('about.title', { defaultValue: 'About xQuesty' })}
+                  </h2>
+                  <p className="max-w-2xl mx-auto text-base sm:text-lg mb-6 sm:mb-8 px-2" dir="auto">
+                    {t('about.desc', { defaultValue: 'xQuesty uses advanced AI solutions to streamline job matching, making it fast and simple for candidates to find the right role, while empowering HR teams to make data-driven hiring decisions, cut recruitment costs, and save valuable time.' })}
                   </p>
                 </section>
                 {/* FAQ */}
                 <section className="container mx-auto px-4 py-8 sm:py-16">
                   <div className="flex items-center justify-between max-w-2xl mx-auto mb-4">
-                    <span className="text-lg font-semibold text-left">Top questions</span>
+                    <span className="text-lg font-semibold text-left" dir="auto">
+                      {t('faq.title', { defaultValue: 'Top questions' })}
+                    </span>
                     <button
-                      className="text-rose-500 font-semibold focus:outline-none hover:underline"
+                      className="text-rose-500 font-semibold focus:outline-none underline"
                       onClick={() => setShowAllFAQ((prev) => !prev)}
                     >
-                      {showAllFAQ ? 'View less' : 'View more'}
+                      {showAllFAQ
+                        ? t('faq.view_less', { defaultValue: 'View less' })
+                        : t('faq.view_more', { defaultValue: 'View more' })}
                     </button>
                   </div>
                   <div className="flex flex-col gap-4 max-w-2xl mx-auto">
@@ -599,7 +700,7 @@ export default function App() {
                             onClick={() => setExpandedFAQ(realIdx === expandedFAQ ? null : realIdx)}
                             aria-expanded={expandedFAQ === realIdx}
                           >
-                            <span className="font-semibold text-lg">{faq.question}</span>
+                            <span className="font-semibold text-lg" dir="auto">{faq.question(t)}</span>
                             <span className="ml-4">
                               {expandedFAQ === realIdx ? (
                                 <span className="text-2xl text-rose-500">-</span>
@@ -616,8 +717,8 @@ export default function App() {
                                 exit={{ height: 0, opacity: 0 }}
                                 transition={{ duration: 0.25 }}
                               >
-                                <div className="px-6 pb-6 text-gray-700">
-                                  {faq.answer}
+                                <div className="px-6 pb-6 text-gray-700" dir="auto">
+                                  {faq.answer(t)}
                                 </div>
                               </motion.div>
                             )}
